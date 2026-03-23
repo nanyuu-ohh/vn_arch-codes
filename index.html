@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>越南建筑标准法规概览(更新至2026.03.23)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Slate and Sky (Professional, Trustworthy, Neutral). Background: slate-50, Text: slate-800, Primary Accent: sky-700, Secondary: slate-200. -->
+    <!-- Application Structure Plan: The SPA is structured as a dashboard with three main task-oriented views. Modular approach breaks down a dense, text-heavy legal report into explorable, logical chunks, prioritizing user navigation and quick information retrieval over linear reading. -->
+    <!-- Visualization & Content Choices: 
+        1. Terminology -> Goal: Inform/Organize -> Viz: Interactive Data Table/Cards -> Interaction: Real-time search/filter, Click for details -> Justification: Users need quick lookups for specific Vietnamese terms, with deep dives for exact legal definitions -> Method: HTML/JS Cards + Modal.
+        2. Regulatory Framework -> Goal: Organize/Relationships -> Viz: Hierarchical Block Diagram -> Interaction: Hover states -> Justification: Clarifies the relationship between MOC, MOST, and Local Govs.
+        3. Standards Timeline -> Goal: Change/Organize -> Viz: Bar Chart -> Interaction: Click bar to filter -> Justification: Shows the evolution of the codes.
+        4. Standard Details Modal -> Goal: Inform/Organize -> Viz: Popup Dialog with TOC -> Interaction: Click card to open -> Justification: Provides a mid-level "Guide/TOC" before jumping to external heavy text. -> Method: Tailwind Modal + JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 250px;
+            }
+        }
+        .tab-btn.active {
+            border-bottom: 2px solid #0369a1;
+            color: #0369a1;
+            font-weight: 600;
+        }
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .view-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hierarchy-box {
+            transition: all 0.2s ease;
+        }
+        .hierarchy-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #0369a1;
+        }
+        .region-block {
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .region-block:hover, .region-block.active {
+            transform: scale(1.02);
+            border-color: #0284c7;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        #backToTop {
+            transition: opacity 0.3s, visibility 0.3s;
+            opacity: 0;
+            visibility: hidden;
+        }
+        #backToTop.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .filter-chip.active {
+            background-color: #0ea5e9;
+            color: white;
+            border-color: #0ea5e9;
+        }
+        .modal-enter {
+            animation: modalFadeIn 0.2s ease-out forwards;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative">
+
+    <header class="bg-slate-900 text-white shadow-md z-50 sticky top-0">
+        <div class="container mx-auto px-4 py-4 md:py-6 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">越南建筑标准法规指南</h1>
+                <p class="text-slate-400 text-sm mt-1">基于 2017 历史架构与 2021-2024 最新规范深度解析</p>
+            </div>
+            <nav class="mt-4 md:mt-0 flex space-x-1 md:space-x-4 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active px-3 py-2 text-sm md:text-base text-slate-300 hover:text-white whitespace-nowrap">基础与术语</button>
+                <button onclick="switchTab('regulation')" id="tab-regulation" class="tab-btn px-3 py-2 text-sm md:text-base text-slate-300 hover:text-white whitespace-nowrap">监管与许可</button>
+                <button onclick="switchTab('standards')" id="tab-standards" class="tab-btn px-3 py-2 text-sm md:text-base text-slate-300 hover:text-white whitespace-nowrap">核心规范库</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+
+        <section id="view-overview" class="view-section active">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-slate-800 flex items-center">
+                    <span class="mr-2 text-sky-600">🇻🇳</span> 行政概况与翻译基准
+                </h2>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    本板块旨在为您提供阅读越南建筑工程文件的基础背景。在此，您可以了解越南基本的行政区划结构，并使用交互式术语卡片快速查阅关键的越-英-中专业词汇对照。<strong class="text-sky-700">点击术语卡片可查看官方规范的完整释义与翻译</strong>。
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-10">
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-100">
+                        <h3 class="font-semibold text-lg mb-4 text-slate-800 flex justify-between items-end">
+                            <span>国家行政区划 (交互大区版)</span>
+                            <span class="text-xs font-normal text-slate-500">点击区块查看详情</span>
+                        </h3>
+                        
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="w-full md:w-5/12 flex flex-col gap-2">
+                                <div id="region-north" class="region-block bg-sky-100 text-sky-800 p-3 rounded cursor-pointer text-center font-bold" onclick="showRegionDetails('north')">
+                                    北部大区 (Bắc Bộ)<br>
+                                    <span class="text-xs font-normal">含 河内、海防</span>
+                                </div>
+                                <div id="region-central" class="region-block bg-teal-100 text-teal-800 p-3 rounded cursor-pointer text-center font-bold" onclick="showRegionDetails('central')">
+                                    中部大区 (Trung Bộ)<br>
+                                    <span class="text-xs font-normal">含 岘港</span>
+                                </div>
+                                <div id="region-south" class="region-block bg-indigo-100 text-indigo-800 p-3 rounded cursor-pointer text-center font-bold" onclick="showRegionDetails('south')">
+                                    南部大区 (Nam Bộ)<br>
+                                    <span class="text-xs font-normal">含 胡志明市、芹苴</span>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-7/12 bg-white border border-slate-200 rounded p-4 shadow-inner min-h-[150px]" id="region-detail-panel">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-xs text-slate-500 flex justify-between">
+                            <span>总面积：346,410 km²</span>
+                            <span>总计：58省 + 5直辖市</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-100 flex flex-col justify-center">
+                        <h3 class="font-semibold text-lg mb-3 text-slate-800">核心管理部门</h3>
+                        <div class="flex items-center p-4 bg-white rounded shadow-sm border border-slate-200 mb-4">
+                            <div class="text-4xl mr-4 text-sky-700">🏛️</div>
+                            <div>
+                                <div class="font-bold text-slate-900">越南建设部 (MOC)</div>
+                                <div class="text-sm text-slate-500">Ministry of Construction</div>
+                                <div class="text-xs text-slate-400 mt-1">负责全越建筑 QCVN 标准体系的制定与管理。</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white rounded shadow-sm border border-slate-200">
+                            <div class="text-4xl mr-4 text-amber-600">🔬</div>
+                            <div>
+                                <div class="font-bold text-slate-900">科学技术部 (MOST)</div>
+                                <div class="text-sm text-slate-500">Ministry of Science and Technology</div>
+                                <div class="text-xs text-slate-400 mt-1">负责全越 TCVN (推荐性技术标准/规范) 的发布。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="font-semibold text-xl mb-4 text-slate-800">核心规范术语词典 (可搜索卡片)</h3>
+                <div class="mb-6 relative">
+                    <input type="text" id="termSearch" onkeyup="filterTerms()" placeholder="输入越文、英文、中文或释义进行检索..." class="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                    <span class="absolute left-3 top-3.5 text-slate-400">🔍</span>
+                </div>
+                
+                <div id="termsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 动态注入 -->
+                </div>
+            </div>
+        </section>
+
+        <section id="view-regulation" class="view-section">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-slate-800 flex items-center">
+                    <span class="mr-2 text-sky-600">⚖️</span> 监管体系与施工许可
+                </h2>
+                <p class="text-slate-600 leading-relaxed mb-8">
+                    本板块解析了《2014年建设法》确立的建筑工程监管架构。您将清晰地看到中央至地方各部门的权责分配关系图（体系架构），并能通过交互卡片快速浏览哪些类型的工程可以合法“豁免”申请施工许可证，这对于项目前期合规策划至关重要。
+                </p>
+
+                <div class="mb-12">
+                    <h3 class="font-semibold text-xl mb-6 text-slate-800 text-center">越南单体建筑监管架构</h3>
+                    <div class="flex flex-col items-center space-y-6">
+                        
+                        <div class="hierarchy-box bg-slate-800 text-white rounded-lg p-4 w-full max-w-md text-center border-b-4 border-sky-500">
+                            <div class="font-bold text-lg">国会 (National Assembly)</div>
+                            <div class="text-xs text-slate-300 mt-1">颁布《建设法》 | 奠定法律依据与审批程序</div>
+                        </div>
+
+                        <div class="text-slate-400 text-2xl">⬇</div>
+
+                        <div class="flex flex-col md:flex-row gap-6 w-full max-w-3xl justify-center">
+                            <div class="hierarchy-box bg-white border-2 border-slate-200 rounded-lg p-5 flex-1 text-center relative">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-sky-100 text-sky-800 text-xs px-2 py-1 rounded font-bold">主管</div>
+                                <div class="font-bold text-slate-800 text-lg">建设部 (MOC)</div>
+                                <div class="text-sm text-slate-600 mt-2">制定《越南建筑标准》</div>
+                                <div class="text-xs text-slate-500 mt-1">确立强制性技术规范 (QCVN)</div>
+                            </div>
+                            <div class="hierarchy-box bg-white border-2 border-slate-200 rounded-lg p-5 flex-1 text-center relative">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded font-bold">协同</div>
+                                <div class="font-bold text-slate-800 text-lg">科技部 (MOST)</div>
+                                <div class="text-sm text-slate-600 mt-2">发布相关标准体系</div>
+                                <div class="text-xs text-slate-500 mt-1">发布推荐性标准及材料检测方法 (TCVN)</div>
+                            </div>
+                        </div>
+
+                        <div class="text-slate-400 text-2xl">⬇</div>
+
+                        <div class="hierarchy-box bg-sky-50 border border-sky-200 rounded-lg p-5 w-full max-w-2xl text-center">
+                            <div class="font-bold text-sky-900 text-lg">地方政府主管部门</div>
+                            <div class="text-sm text-sky-800 mt-2">负责建筑监管的具体实施</div>
+                            <div class="text-xs text-sky-700 mt-1">全国统一执行建筑标准 | 核发施工许可 | 违规查处与执法</div>
+                            <div class="text-xs text-slate-500 mt-3 pt-3 border-t border-sky-200 italic">* 超大型或特殊重点项目由中央建设部直管</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-200 pt-8">
+                    <h3 class="font-semibold text-xl mb-2 text-slate-800">施工许可证豁免清单</h3>
+                    <p class="text-sm text-slate-500 mb-6">《建设法》第89条规定，以下工程在开工前无需申请施工许可证（Hover查看详情）：</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="exemptionsGrid">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="view-standards" class="view-section">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-slate-800 flex items-center">
+                    <span class="mr-2 text-sky-600">📚</span> 核心规范图谱
+                </h2>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    越南现行建筑标准体系经历了多次重大迭代。本板块整合了强制性规范（QCVN）以及业内高频使用的核心推荐性标准（TCVN）。您可以通过年份图表或专业分类标签筛选定位文献，<strong class="text-sky-700">点击卡片即可查看规范大纲/目录导览</strong>。
+                </p>
+
+                <div class="bg-slate-50 rounded-xl p-4 md:p-6 mb-8 border border-slate-200">
+                    <h3 class="text-center font-semibold text-slate-700 mb-2">核心标准颁布/修订数量趋势 (1997 - 最新)</h3>
+                    <p class="text-center text-xs text-slate-500 mb-4">点击柱体过滤下方规范列表</p>
+                    <div class="chart-container">
+                        <canvas id="standardsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 border-b border-slate-200 pb-4 gap-4">
+                    <h3 class="font-semibold text-xl text-slate-800 whitespace-nowrap flex items-center">
+                        规范文献库 
+                        <span id="libraryCount" class="text-sm font-normal text-slate-500 ml-2"></span>
+                    </h3>
+                    
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="flex flex-wrap gap-2" id="disciplineFilters">
+                        </div>
+                        <button onclick="resetStandardsFilter()" id="resetFiltersBtn" class="hidden text-xs text-slate-500 hover:text-slate-800 bg-white border border-slate-200 px-2 py-1 rounded transition-colors ml-2">
+                            × 清除筛选
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="standardsList">
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-sm">
+        <p>数据源：越南建筑标准法规 | 交互式数据架构解析 (添加二级导览与全量术语翻译)</p>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 bg-sky-600 text-white p-3 rounded-full shadow-lg hover:bg-sky-700 transition z-50" title="返回顶部">
+        ⬆️
+    </button>
+
+    <!-- 规范详情弹窗 Modal (背景增加 backdrop-blur-sm) -->
+    <div id="standardModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col modal-enter overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-start">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h3 id="modalId" class="text-xl font-bold text-slate-800"></h3>
+                        <span id="modalYear" class="text-xs font-bold bg-slate-800 text-white px-2 py-0.5 rounded"></span>
+                    </div>
+                    <h4 id="modalTitle" class="text-sky-700 font-medium text-lg"></h4>
+                </div>
+                <button onclick="closeStandardModal()" class="text-slate-400 hover:text-slate-700 transition-colors p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="px-6 py-6 overflow-y-auto flex-grow">
+                <div class="mb-4" id="modalTags"></div>
+                <p id="modalDesc" class="text-slate-600 text-sm mb-6 leading-relaxed"></p>
+                
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-5">
+                    <h5 class="font-bold text-slate-800 mb-3 flex items-center">
+                        <span class="mr-2">📑</span> 核心目录 / 内容导览
+                    </h5>
+                    <ul id="modalToc" class="space-y-2 text-sm text-slate-700 list-inside list-disc marker:text-sky-400">
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-end">
+                <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded shadow-sm transition-colors flex items-center">
+                    在搜索引擎 / TVPL 查找原文
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增：术语原文解释弹窗 Modal (背景增加 backdrop-blur-sm) -->
+    <div id="termModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col modal-enter overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-start">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h3 id="termModalVi" class="text-xl font-bold text-sky-800"></h3>
+                        <span id="termModalSource" class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded border border-slate-300"></span>
+                    </div>
+                    <div class="flex gap-2 mt-2">
+                        <span id="termModalEn" class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded"></span>
+                        <span id="termModalZh" class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded"></span>
+                    </div>
+                </div>
+                <button onclick="closeTermModal()" class="text-slate-400 hover:text-slate-700 transition-colors p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="px-6 py-6 overflow-y-auto flex-grow">
+                <!-- 越文原文块 -->
+                <div class="mb-6">
+                    <h5 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                        <span class="w-1.5 h-4 bg-sky-500 rounded mr-2"></span> Giải thích từ ngữ (越文官方释义)
+                    </h5>
+                    <div id="termModalFullVi" class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-slate-700 text-sm leading-relaxed">
+                    </div>
+                </div>
+                <!-- 中文翻译块 -->
+                <div>
+                    <h5 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                        <span class="w-1.5 h-4 bg-emerald-500 rounded mr-2"></span> 中文完整翻译
+                    </h5>
+                    <div id="termModalFullZh" class="bg-emerald-50 p-4 rounded-lg border border-emerald-200 text-slate-800 text-sm leading-relaxed">
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 text-right">
+                <button onclick="closeTermModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded font-medium transition-colors">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 包含原文释义及完整中文翻译的扩充术语库
+        const termsData = [
+            { vi: "Xay Dung", en: "Construction / Building", zh: "建设 / 建筑", source: "基础通用", desc: "泛指建设行为或建筑行业本身。", fullVi: "Các hoạt động liên quan đến việc xây dựng, thiết kế, thi công các công trình.", fullZh: "指与工程建设、设计、施工相关的各项活动。" },
+            { vi: "Bo Xay dung", en: "Ministry of Construction (MOC)", zh: "建设部", source: "基础通用", desc: "越南中央政府负责建筑行业管理的最高行政机关。", fullVi: "Cơ quan của Chính phủ thực hiện chức năng quản lý nhà nước về: Xây dựng; vật liệu xây dựng; nhà ở và công sở; kiến trúc, quy hoạch xây dựng đô thị, quy hoạch xây dựng nông thôn...", fullZh: "履行国家管理职能的政府机构，主管领域包括：工程建设、建筑材料、住房与办公楼、建筑学、城市建设规划、农村建设规划等。" },
+            { vi: "Luat Xay dung", en: "Construction Law", zh: "建设法", source: "基础通用", desc: "由国会颁布的工程建设领域最高法律。", fullVi: "Luật quy định về quyền, nghĩa vụ, trách nhiệm của cơ quan, tổ chức, cá nhân và quản lý nhà nước trong hoạt động đầu tư xây dựng.", fullZh: "规定机关、组织、个人在建设投资活动中的权利、义务、责任以及国家管理的法律。" },
+            { vi: "Tieu Chuan (TCVN)", en: "Standard", zh: "推荐性标准 / 规范", source: "基础通用", desc: "科技部发布的推荐性标准，包含材料、试验与部分设计方法。", fullVi: "Quy định về đặc tính kỹ thuật và yêu cầu quản lý dùng làm chuẩn để phân loại, đánh giá sản phẩm, hàng hoá, dịch vụ, quá trình, môi trường và các đối tượng khác trong hoạt động kinh tế - xã hội nhằm nâng cao chất lượng và hiệu quả của các đối tượng này.", fullZh: "用作分类、评价产品、货物、服务、过程、环境及社会经济活动中其他对象的标准技术特性和管理要求，旨在提高这些对象的质量和效益。（原则上为推荐性）" },
+            { vi: "Quy Chuan (QCVN)", en: "Technical Regulation", zh: "强制性规范", source: "基础通用", desc: "建设部发布的国家强制性技术规范，设计审批必查。", fullVi: "Quy định về mức giới hạn của đặc tính kỹ thuật và yêu cầu quản lý mà sản phẩm, hàng hoá, dịch vụ, quá trình, môi trường và các đối tượng khác trong hoạt động kinh tế - xã hội phải tuân thủ để bảo đảm an toàn, vệ sinh, sức khoẻ con người...", fullZh: "规定产品、货物、服务、过程、环境及社会经济活动中其他对象必须遵守的技术特性限值和管理要求，以确保安全、卫生、人类健康及环境保护等。（具有强制执行效力）" },
+            
+            // QCVN 01:2021 原文完整录入
+            { vi: "Quy hoạch xây dựng", en: "Construction planning", zh: "建设规划", source: "QCVN 01:2021", 
+              desc: "城市、农村及功能区的空间组织；基础设施系统的组织...", 
+              fullVi: "Việc tổ chức không gian của đô thị, nông thôn và các khu chức năng; tổ chức hệ thống công trình hạ tầng kỹ thuật, hạ tầng xã hội; tạo lập môi trường thích hợp cho người dân sống tại các vùng lãnh thổ, bảo đảm kết hợp hài hoà giữa lợi ích quốc gia với lợi ích cộng đồng, đáp ứng các mục tiêu phát triển kinh tế - xã hội, quốc phòng, an ninh, bảo vệ môi trường, ứng phó với biến đổi khí hậu. Quy hoạch xây dựng được thể hiện thông qua đồ án quy hoạch xây dựng gồm sơ đồ, bản vẽ, mô hình và thuyết minh.", 
+              fullZh: "指对城市、农村和各功能区进行空间组织；对技术基础设施、社会基础设施系统进行组织；为各领土区域的居民创造适宜的生活环境，确保国家利益与社区利益的和谐结合，满足经济社会发展、国防安全、环境保护和应对气候变化的目标。建设规划通过包含图表、图纸、模型和说明的建设规划方案来体现。" },
+            { vi: "Quy hoạch đô thị", en: "Urban planning", zh: "城市规划", source: "QCVN 01:2021", 
+              desc: "城市空间、建筑、景观、技术社会基础设施及住宅的组织...", 
+              fullVi: "Việc tổ chức không gian, kiến trúc, cảnh quan đô thị, hệ thống công trình hạ tầng kỹ thuật, công trình hạ tầng xã hội và nhà ở để tạo lập môi trường sống thích hợp cho người dân sống trong đô thị. Quy hoạch đô thị được thể hiện thông qua đồ án quy hoạch đô thị.", 
+              fullZh: "指对城市空间、建筑、城市景观、技术基础设施系统、社会基础设施工程和住房进行组织，为生活在城市中的居民创造适宜的生活环境。城市规划通过城市规划方案来体现。" },
+            { vi: "Khu chức năng", en: "Functional zone", zh: "功能区", source: "QCVN 01:2021", 
+              desc: "包括经济区、工业区、出口加工区、高新区等...", 
+              fullVi: "Bao gồm khu kinh tế, khu công nghiệp, khu chế xuất, khu công nghệ cao; khu du lịch; khu nghiên cứu, đào tạo; khu thể dục thể thao.", 
+              fullZh: "包括经济区、工业区、出口加工区、高新区；旅游区；研究与培训区；体育运动区。" },
+            { vi: "Đô thị", en: "Urban area", zh: "城市", source: "QCVN 01:2021", 
+              desc: "人口密度高且主要从事非农业经济活动的集中居住区...", 
+              fullVi: "Khu vực tập trung dân cư sinh sống có mật độ cao và chủ yếu hoạt động trong lĩnh vực kinh tế phi nông nghiệp, là trung tâm chính trị, hành chính, kinh tế, văn hóa hoặc chuyên ngành, có vai trò thúc đẩy sự phát triển kinh tế - xã hội của quốc gia hoặc một vùng lãnh thổ, một địa phương, bao gồm nội thành, ngoại thành của thành phố; nội thị, ngoại thị của thị xã; thị trấn.", 
+              fullZh: "指人口密度高且主要从事非农业经济活动的集中居住区，是政治、行政、经济、文化或专业中心，对国家或某一领土区域、地方的经济社会发展具有促进作用，包括市的市区和郊区；市社（县级市）的市区和郊区；市镇。" },
+            { vi: "Đất xây dựng đô thị", en: "Urban construction land", zh: "城市建设用地", source: "QCVN 01:2021", 
+              desc: "用于建设城市功能的土地，包括民用和非民用土地。", 
+              fullVi: "Đất dành để xây dựng các chức năng đô thị (gồm cả hệ thống hạ tầng kỹ thuật đô thị) bao gồm đất dân dụng và đất ngoài dân dụng.", 
+              fullZh: "预留用于建设各项城市功能（包含城市技术基础设施系统）的土地，包括民用土地和非民用土地。" },
+            { vi: "Đất dân dụng", en: "Civil land", zh: "民用土地", source: "QCVN 01:2021", 
+              desc: "主要用于民用活动的建筑用地...", 
+              fullVi: "Đất để xây dựng các công trình chủ yếu phục vụ các hoạt động dân dụng bao gồm: đất đơn vị ở hoặc đất ở tại đô thị, đất công trình dịch vụ - công cộng đô thị, đất cây xanh công cộng đô thị và đất hạ tầng kỹ thuật đô thị.", 
+              fullZh: "用于建设主要服务于民用活动工程的土地，包括：居住小区用地或城市住宅用地、城市公共服务设施用地、城市公共绿地和城市技术基础设施用地。" },
+            { vi: "Khu vực phát triển đô thị", en: "Urban development area", zh: "城市发展区", source: "QCVN 01:2021", 
+              desc: "确定在一定阶段内投资发展城市的区域。", 
+              fullVi: "Khu vực được xác định để đầu tư phát triển đô thị trong một giai đoạn nhất định. Khu vực phát triển đô thị bao gồm: Khu vực phát triển đô thị mới, khu vực phát triển đô thị mở rộng, khu vực cải tạo, khu vực bảo tồn, khu vực tái thiết đô thị, khu vực có chức năng chuyên biệt.", 
+              fullZh: "确定在一定阶段内投资进行城市开发的区域。城市发展区包括：新城市发展区、城市扩展发展区、改造区、保护区、城市重建区、具备专项功能的区域。" },
+            { vi: "Đơn vị ở", en: "Neighborhood unit", zh: "居住小区", source: "QCVN 01:2021", 
+              desc: "城市主要服务居住需求的基本功能区...", 
+              fullVi: "Khu chức năng cơ bản của đô thị chủ yếu phục vụ nhu cầu ở bao gồm: các nhóm nhà ở; các công trình dịch vụ - công cộng, cây xanh công cộng phục vụ cho nhu cầu thường xuyên, hàng ngày của cộng đồng dân cư; đường giao thông (đường từ cấp phân khu vực đến đường nhóm nhà ở) và bãi đỗ xe cho đơn vị ở.", 
+              fullZh: "城市中主要服务于居住需求的基本功能区，包括：各住宅组团；满足居民社区日常经常性需求的公共服务设施、公共绿地；交通道路（从分区级道路到住宅组团道路）以及供居住小区使用的停车场。" },
+            { vi: "Nhóm nhà ở", en: "Housing group", zh: "住宅组团", source: "QCVN 01:2021", 
+              desc: "具有共用公共空间的住宅工程组合...", 
+              fullVi: "Tổ hợp các công trình nhà ở có không gian công cộng sử dụng chung (vườn hoa, sân chơi, bãi đỗ xe phục vụ nhóm nhà ở và đường cấp nội bộ không bao gồm đường phân khu vực...).", 
+              fullZh: "具备共同使用公共空间（如小花园、游乐场、服务于该住宅组团的停车场及内部道路，不含分区级道路等）的住宅工程组合。" },
+            { vi: "Lô đất", en: "Plot / Lot", zh: "地块", source: "QCVN 01:2021", 
+              desc: "由交通道路或自然边界限定的具有相同功能的土地。", 
+              fullVi: "Bao gồm một hoặc nhiều thửa đất liền kề có chức năng sử dụng đất giống nhau được giới hạn bởi các tuyến đường giao thông, các đường ranh giới tự nhiên hoặc nhân tạo khác.", 
+              fullZh: "包含一宗或多宗具有相同土地使用功能且彼此相邻的土地，由交通路线、自然边界或其他人工边界所界定。" },
+            { vi: "Nhà ở riêng lẻ", en: "Individual house", zh: "独立住宅", source: "QCVN 01:2021", 
+              desc: "建在独立地块上的合法住宅，含别墅、联排等。", 
+              fullVi: "Nhà ở được xây dựng trên thửa đất riêng biệt thuộc quyền sử dụng hợp pháp của tổ chức, hộ gia đình, cá nhân, bao gồm nhà biệt thự, nhà ở liền kề và nhà ở độc lập.", 
+              fullZh: "建在属于组织、家庭或个人合法使用权的独立地块上的住宅，包括别墅、联排住宅和独立式住宅。" },
+            { vi: "Nhà chung cư", en: "Apartment building", zh: "公寓楼 / 多层住宅", source: "QCVN 01:2021", 
+              desc: "两层及以上，多套房，有共用通道、楼梯及基础设施的住宅。", 
+              fullVi: "Nhà ở có từ hai tầng trở lên, có nhiều căn hộ, có lối đi, cầu thang chung, có phần sở hữu riêng, phần sở hữu chung và hệ thống công trình hạ tầng sử dụng chung cho các hộ gia đình, cá nhân, tổ chức.", 
+              fullZh: "具有两层及以上、包含多套公寓、设有共用通道和公共楼梯的住宅，其内划分有专有部分、共有部分，并配备供各家庭、个人或组织共同使用的基础设施系统。" },
+            { vi: "Đất sử dụng hỗn hợp", en: "Mixed-use land", zh: "混合用地", source: "QCVN 01:2021", 
+              desc: "用于建设混合功能建筑或具有多种用途的土地。", 
+              fullVi: "Đất xây dựng nhà, công trình hỗn hợp hoặc được sử dụng cho một số mục đích khác nhau được xác định trong đồ án quy hoạch.", 
+              fullZh: "用于建设混合功能房屋、工程，或者在规划方案中被指定用于若干不同目的的土地。" },
+            { vi: "Công trình hỗn hợp", en: "Mixed-use building", zh: "综合体 / 混合建筑", source: "QCVN 01:2021", 
+              desc: "具有多种不同使用功能的建筑工程。", 
+              fullVi: "Công trình có các chức năng sử dụng khác nhau.", 
+              fullZh: "包含多种不同使用功能的建筑工程。" },
+            { vi: "Đất cây xanh đô thị", en: "Urban green land", zh: "城市绿地", source: "QCVN 01:2021", 
+              desc: "包括公共绿地、限制使用绿地及专用绿地。", 
+              fullVi: "Bao gồm: đất cây xanh sử dụng công cộng, đất cây xanh sử dụng hạn chế, đất cây xanh chuyên dụng.\nCHÚ THÍCH 1: Đất cây xanh sử dụng công cộng trong đô thị là đất công viên, vườn hoa, sân chơi, đảm bảo tiếp cận của người dân;\nCHÚ THÍCH 2: Đất cây xanh sử dụng hạn chế là đất cây xanh được trồng trong khuôn viên các công trình, công viên chuyên đề do tổ chức, cá nhân quản lý và sử dụng;\nCHÚ THÍCH 3: Đất cây xanh chuyên dụng là đất các loại cây xanh trong vườn ươm, đất cây xanh phục vụ nghiên cứu, đất cây xanh cách ly.", 
+              fullZh: "包括：公共绿地、限制使用绿地、专用绿地。\n注1：城市公共绿地指公园、小游园、游乐场用地，需确保民众可无障碍进入；\n注2：限制使用绿地指种植在工程院落内、由组织或个人管理和使用的主题公园绿地；\n注3：专用绿地指苗圃中的各类植物用地、用于科研的绿地以及隔离带绿地。" },
+            { vi: "Đất cây xanh sử dụng công cộng trong đơn vị ở", en: "Public green land in neighborhood", zh: "居住小区公共绿地", source: "QCVN 01:2021", 
+              desc: "服务于居住小区内所有居民并确保可达性的公园、游乐场等。", 
+              fullVi: "Bao gồm công viên, vườn hoa, sân chơi phục vụ cho nhu cầu và đảm bảo khả năng tiếp cận của mọi người dân trong đơn vị ở.", 
+              fullZh: "包括服务于小区需求并确保居住小区内所有民众均可无障碍进入的公园、小游园和游乐场。" },
+            { vi: "Điểm dân cư nông thôn", en: "Rural residential point", zh: "农村居民点", source: "QCVN 01:2021", 
+              desc: "一定区域内家庭在生产生活上相互联系的集中居住地。", 
+              fullVi: "Nơi cư trú tập trung của các hộ gia đình gắn kết với nhau trong sản xuất, sinh hoạt và các hoạt động xã hội khác trong phạm vi một khu vực nhất định, được hình thành do điều kiện tự nhiên, điều kiện kinh tế - xã hội, văn hóa và các yếu tố khác.", 
+              fullZh: "在一定区域范围内，各家庭在生产、生活及其他社会活动中相互联系的集中居住地，它是由自然条件、社会经济条件、文化及其他因素共同作用而形成的。" },
+            { vi: "Hệ thống hạ tầng kỹ thuật (HTKT)", en: "Technical infrastructure", zh: "市政技术基础设施", source: "QCVN 01:2021", 
+              desc: "交通、供能、照明、通信、给排水及垃圾处理等系统。", 
+              fullVi: "- Hệ thống giao thông;\n- Hệ thống cung cấp năng lượng (cấp điện, xăng dầu, khí đốt...);\n- Hệ thống chiếu sáng công cộng;\n- Hệ thống thông tin liên lạc (hạ tầng kỹ thuật viễn thông);\n- Hệ thống cấp nước;\n- Hệ thống thoát nước và xử lý nước thải (XLNT);\n- Hệ thống quản lý chất thải rắn (CTR);\n- Hệ thống vệ sinh công cộng;\n- Hệ thống nhà tang lễ, nghĩa trang và cơ sở hỏa táng;\n- Các hệ thống hạ tầng kỹ thuật khác.", 
+              fullZh: "包括：\n- 交通系统；\n- 能源供应系统（供电、汽油、燃气等）；\n- 公共照明系统；\n- 通信联络系统（电信基础设施）；\n- 给水系统；\n- 排水与污水处理系统 (XLNT)；\n- 固体废弃物管理系统 (CTR)；\n- 公共卫生系统；\n- 殡仪馆、公墓及火化设施系统；\n- 其他技术基础设施系统。" },
+            { vi: "Hệ thống hạ tầng xã hội", en: "Social infrastructure", zh: "社会基础设施", source: "QCVN 01:2021", 
+              desc: "医疗、教育、文化、体育、商业及公园等系统。", 
+              fullVi: "- Hệ thống dịch vụ - công cộng: y tế, giáo dục, văn hóa, thể dục thể thao, thương mại và các công trình dịch vụ - công cộng khác;\n- Hệ thống công viên, vườn hoa, sân chơi;\n- Các hệ thống hạ tầng xã hội khác.", 
+              fullZh: "包括：\n- 公共服务系统：医疗、教育、文化、体育运动、商业及其他公共服务工程；\n- 公园、小游园、游乐场系统；\n- 其他社会基础设施系统。" },
+            { vi: "Mật độ xây dựng", en: "Building density", zh: "建筑密度", source: "QCVN 01:2021", 
+              desc: "主要建筑工程占地面积与地块面积（或整个区域总面积）的比例。", 
+              fullVi: "- Mật độ xây dựng thuần: là tỷ lệ diện tích chiếm đất của các công trình kiến trúc chính trên diện tích lô đất (không bao gồm diện tích chiếm đất của các công trình ngoài trời như tiểu cảnh trang trí, bể bơi, bãi (sân) đỗ xe, sân thể thao, nhà bảo vệ, lối lên xuống, bộ phận thông gió tầng hầm có mái che và các công trình hạ tầng kỹ thuật khác).\nCHÚ THÍCH: Các bộ phận công trình, chi tiết kiến trúc trang trí như: sê-nô, ô-văng, mái đua, mái đón, bậc lên xuống, bậu cửa, hành lang cầu đã tuân thủ các quy định về an toàn cháy, an toàn xây dựng cho phép không tính vào diện tích chiếm đất nếu đảm bảo không gây cản trở lưu thông của người, phương tiện và không kết hợp các công năng sử dụng khác.\n- Mật độ xây dựng gộp của một khu vực đô thị: là tỷ lệ diện tích chiếm đất của các công trình kiến trúc chính trên diện tích toàn khu đất (diện tích toàn khu đất có thể bao gồm cả: sân, đường, các khu cây xanh, không gian mở và các khu vực không xây dựng công trình).", 
+              fullZh: "- 净建筑密度：指主要建筑工程占地面积与地块面积的比例（不包括装饰小品、游泳池、露天停车场、运动场、门卫室、出入口坡道、有顶的地下室通风口及其他技术基础设施等室外工程的占地面积）。\n注：若天沟、雨篷、挑檐、门廊、台阶、窗台、连廊等工程构件及装饰性建筑细节已遵守消防与结构安全规定，在确保不妨碍人员和车辆通行且不结合其他使用功能的前提下，可不计入占地面积。\n- 城市区域综合建筑密度：指主要建筑工程占地面积与整个区域总面积的比例（整个区域总面积可包含院落、道路、绿化区、开敞空间及不可建设区域）。" },
+            { vi: "Hệ số sử dụng đất", en: "Land use coefficient (FAR)", zh: "容积率", source: "QCVN 01:2021", 
+              desc: "建筑总建筑面积（排除技术、消防、避难、停车面积）与地块总面积的比值。", 
+              fullVi: "Tỷ lệ của tổng diện tích sàn của công trình gồm cả tầng hầm (trừ các diện tích sàn phục vụ cho hệ thống kỹ thuật, phòng cháy chữa cháy, gian lánh nạn và đỗ xe của công trình) trên tổng diện tích lô đất.", 
+              fullZh: "指建筑工程总楼面面积含地下室（扣除服务于该工程的技术设备系统、消防设施、避难层以及停车空间的楼面面积）与地块总面积之比。" },
+            { vi: "Chỉ giới đường đỏ", en: "Red line", zh: "道路红线", source: "QCVN 01:2021", 
+              desc: "划分可建设用地与留作交通/基建用地的边界线。", 
+              fullVi: "Đường ranh giới được xác định trên bản đồ quy hoạch và thực địa để phân định ranh giới giữa phần đất được xây dựng công trình và phần đất được dành cho đường giao thông hoặc công trình hạ tầng kỹ thuật, không gian công cộng khác.", 
+              fullZh: "在规划图和实地勘测中确定的边界线，用于界定允许进行工程建设的土地与预留给交通道路、技术基础设施或其他公共空间的土地之间的分界。" },
+            { vi: "Chỉ giới xây dựng", en: "Building line / Setback line", zh: "建筑控制线", source: "QCVN 01:2021", 
+              desc: "允许在宗地上建设主体工程的限界线。", 
+              fullVi: "Đường giới hạn cho phép xây dựng công trình chính trên thửa đất", 
+              fullZh: "允许在地块上建造主体工程的极限边界线。" },
+            { vi: "Khoảng lùi", en: "Setback", zh: "建筑退让 / 退距", source: "QCVN 01:2021", 
+              desc: "道路红线与建筑控制线之间的空间。", 
+              fullVi: "Khoảng không gian giữa chỉ giới đường đỏ và chỉ giới xây dựng.", 
+              fullZh: "道路红线（Chỉ giới đường đỏ）与建筑控制线（Chỉ giới xây dựng）之间的退让空间距离。" },
+            { vi: "Chiều cao công trình xây dựng", en: "Building height", zh: "建筑高度", source: "QCVN 01:2021", 
+              desc: "自获批规划的室外地坪标高算至建筑最高点的高度。", 
+              fullVi: "Chiều cao công trình tính từ cao độ mặt đất đặt công trình theo quy hoạch được duyệt tới điểm cao nhất của công trình (kể cả mái tum hoặc mái dốc). Đối với công trình có các cao độ mặt đất khác nhau thì chiều cao công trình tính từ cao độ mặt đất thấp nhất theo quy hoạch được duyệt.\nCHÚ THÍCH: Các thiết bị kỹ thuật trên mái: cột ăng ten, cột thu sét, thiết bị sử dụng năng lượng mặt trời, bể nước kim loại, ống khói, ống thông hơi, chi tiết kiến trúc trang trí thì không tính vào chiều cao công trình.", 
+              fullZh: "自按照获批规划设定的工程所处地面的标高，算至该工程最高点（包括屋顶机房突起物或坡屋顶）的垂直高度。对于具有不同地面标高的工程，建筑高度从获批规划中最低的地面标高开始计算。\n注：设置在屋面的技术设备（如天线杆、避雷针、太阳能设备、金属水箱、烟囱、通风管以及纯装饰性建筑细节）不计入建筑高度。" },
+            { vi: "Khoảng cách an toàn về môi trường (ATMT)", en: "Environmental safety distance", zh: "环保安全距离", source: "QCVN 01:2021", 
+              desc: "确保污染源周边卫生、安全的最小距离。", 
+              fullVi: "Khoảng cách tối thiểu để đảm bảo các yêu cầu về vệ sinh, an toàn, môi trường của nguồn phát sinh ô nhiễm (hoặc nhà, công trình bao chứa nguồn phát sinh ô nhiễm).", 
+              fullZh: "为确保污染发生源（或包容该污染发生源的房屋、工程）周边的卫生、安全与环保要求而必须保留的最小距离。" },
+            { vi: "Hành lang bảo vệ an toàn", en: "Safety protection corridor", zh: "安全保护廊道", source: "QCVN 01:2021", 
+              desc: "沿基础设施周边预留的具有最小长宽高的安全空间。", 
+              fullVi: "Khoảng không gian tối thiểu về chiều rộng, chiều dài và chiều cao, chạy dọc hoặc bao quanh công trình hạ tầng kỹ thuật.", 
+              fullZh: "沿着技术基础设施工程走向或环绕其周边设置的，在宽度、长度和高度上具有最低规定尺寸的安全空间。" },
+            { vi: "Không gian xây dựng ngầm đô thị", en: "Underground space", zh: "城市地下建设空间", source: "QCVN 01:2021", 
+              desc: "地表以下建造的空间，包括地下交通、公共工程及管线等。", 
+              fullVi: "Không gian xây dựng công trình dưới mặt đất bao gồm: công trình công cộng ngầm, công trình giao thông ngầm, các công trình đầu mối kỹ thuật ngầm và phần ngầm của các công trình xây dựng trên mặt đất, công trình đường dây, cáp, đường ống kỹ thuật ngầm, hào và tuy nen kỹ thuật.", 
+              fullZh: "在地表以下建造工程的空间，包括：地下公共工程、地下交通工程、地下技术枢纽工程以及地面建筑工程的地下部分、地下缆线与技术管线工程、综合管沟及管廊。" },
+            { vi: "Tuy-nen kỹ thuật", en: "Technical tunnel", zh: "综合管廊 (大型)", source: "QCVN 01:2021", 
+              desc: "尺寸足以容纳人员进入检修维护线缆管线的地下廊道。", 
+              fullVi: "Công trình hạ tầng kỹ thuật ngầm theo tuyến có kích thước lớn đủ để đảm bảo cho con người có thể thực hiện các nhiệm vụ lắp đặt, sửa chữa và bảo trì các thiết bị, đường ống kỹ thuật.", 
+              fullZh: "呈线状布置的大型地下市政技术基础设施工程，其内部尺寸足以保证工作人员能够进入并执行技术管线、设备的安装、修理和日常维护任务。" },
+            { vi: "Hào kỹ thuật", en: "Technical trench", zh: "综合管沟 (小型)", source: "QCVN 01:2021", 
+              desc: "尺寸较小，仅用于敷设铺设线缆和技术管道的地下沟槽。", 
+              fullVi: "Công trình hạ tầng kỹ thuật ngầm theo tuyến có kích thước nhỏ để lắp đặt các đường dây, cáp và các đường ống kỹ thuật.", 
+              fullZh: "呈线状布置的小型地下市政技术基础设施工程，主要用于敷设电线、电缆及各类技术管道（人员通常无法直接进入内部行走操作）。" }
+        ];
+
+        const exemptionsData = [
+            { title: "国家与紧急工程", desc: "国家机密工程、紧急指挥建设项目和跨越多个省级的工程。" },
+            { title: "高层批复工程", desc: "经总理、部长、部级机构领导、各级人民委员会主席批准投资的项目。" },
+            { title: "临时施工建筑", desc: "为主体工程施工提供服务的临时建筑工程（临建）。" },
+            { title: "园区规划内项目", desc: "在工业区/高新区内，有1/500规划并已完成施工图审查的建设项目。" },
+            { title: "小型合规住宅", desc: "在获批规划内，层数 < 7层 且总建筑面积 < 500平方米的住宅楼。" },
+            { title: "内部维修改造", desc: "不改变承重结构、功能用途，不影响环境和安全的内部维修设备安装。" },
+            { title: "非临街外观改造", desc: "改变建筑外观但未毗邻有城市风貌管理要求的城市街道的改造工程。" },
+            { title: "农村特定基建", desc: "仅需编制投资报告，且无详细规划的农村地区市政基础设施工程。" },
+            { title: "普通农村个人住宅", desc: "未批准详细规划的农村地区建设工程及个人住宅（非保护区/遗产区）。" }
+        ];
+
+        const standardsData = [
+            { 
+                id: "QCVN 01:2021/BXD", year: 2021, title: "建筑规划国家技术规范", type: "Planning", disciplines: ["规划", "建筑"], 
+                desc: "替代了原01:2008和14:2009，统合了城市与农村的规划控制、退让及间距标准。", 
+                url: "https://www.google.com/search?q=QCVN+01%3A2021%2FBXD",
+                toc: ["第一部分：一般规定 (适用范围、术语解释)", "第二部分：土地利用与城市空间规划 (容积率、建筑密度限制)", "第三部分：社会与技术基础设施规划 (给水、排水、交通用地指标)", "第四部分：农村地区规划与建设要求", "附录：特定建筑保护区与安全退让距离规定"]
+            },
+            { 
+                id: "QCVN 02:2022/BXD", year: 2022, title: "建筑自然物理与气候数据规范", type: "Structural", disciplines: ["结构", "建筑"], 
+                desc: "替代了02:2009，更新了风荷载、地震、气温等核心气象与地质参数取值。", 
+                url: "https://www.google.com/search?q=QCVN+02%3A2022%2FBXD",
+                toc: ["1. 一般规定 (适用对象与数据来源)", "2. 气象数据 (全国气候特征分区、气温湿度极值)", "3. 风荷载参数 (各地区基本风压及风速台风数据)", "4. 地震数据 (抗震设防烈度与区域划分)", "附录：各省市具体气象台站实测数据表"]
+            },
+            { 
+                id: "QCVN 03:2022/BXD", year: 2022, title: "工程项目分类与分级标准", type: "Administrative", disciplines: ["综合", "管理"], 
+                desc: "替代了03:2012，调整了工程分级及审批权限，是报建评估的核心。", 
+                url: "https://www.google.com/search?q=QCVN+03%3A2022%2FBXD",
+                toc: ["1. 一般规定 (工程分类与分级的基本原则)", "2. 建筑工程功能分类 (民用、工业、基建、交通、农业)", "3. 工程等级划分标准 (特级、一级至四级)", "4. 等级判定因素 (规模、重要性、风险程度、服务年限)", "附录：各类具体工程详细分级指标对照表"]
+            },
+            { 
+                id: "QCVN 05:2008/BXD", year: 2008, title: "无障碍设计规范", type: "Design", disciplines: ["建筑", "规划"], 
+                desc: "涉及公共建筑报建的强制性无障碍设计总体要求。", 
+                url: "https://www.google.com/search?q=QCVN+05%3A2008%2FBXD",
+                toc: ["第1章：一般规定 (适用范围与残障类型定义)", "第2章：室外环境设计 (人行道、坡道、出入口要求)", "第3章：室内无障碍通道与设施 (走廊宽度、电梯尺寸)", "第4章：卫生间与专用停车位标准", "第5章：视觉与听觉辅助标识系统"]
+            },
+            { 
+                id: "QCVN 06:2022/BXD", year: 2022, title: "建筑与构筑物消防安全规范", type: "Fire", disciplines: ["消防", "建筑", "暖通"], 
+                desc: "现行最核心消防规范 (含QCVN 06:2022/BXD Amendment 1)，规范疏散与防排烟。", 
+                url: "https://www.google.com/search?q=QCVN+06%3A2022%2FBXD",
+                toc: ["1. 一般规定 (范围与术语)", "2. 建筑防火技术分类 (耐火等级、构件耐火极限)", "3. 确保人员安全 (疏散路径、疏散楼梯间设计规范)", "4. 防止火灾蔓延 (防火分区、防火间距、防火墙体构造)", "5. 灭火及救援设施 (消防车道、消防电梯配置要求)", "附录：(A)术语释义、(B)材料火灾特性、(E)防火间距表、(F)构件耐火极限表、(G)疏散距离表、(H)高度与面积限制"]
+            },
+            { 
+                id: "QCVN 07:2016/BXD", year: 2016, title: "市政基础设施工程技术规范", type: "Infrastructure", disciplines: ["市政", "给排水", "电气"], 
+                desc: "包含给排水、管廊、道路、供电、供气等10个子分册系统规范。", 
+                url: "https://www.google.com/search?q=QCVN+07%3A2016%2FBXD",
+                toc: ["QCVN 07-1：市政给水工程技术规范", "QCVN 07-2：市政排污工程技术规范", "QCVN 07-3：综合管廊与隧道工程技术规范", "QCVN 07-4：城市道路交通基础设施规范", "QCVN 07-5：市政供电与电网敷设规范", "QCVN 07-6至10：燃气、照明、通信、废弃物处理及公墓规范"]
+            },
+            { 
+                id: "QCVN 08:2009/BXD", year: 2009, title: "城市地下工程与空间技术标准", type: "Infrastructure", disciplines: ["结构", "市政", "地下空间"], 
+                desc: "地铁轨道交通、地下车库与停车场工程规划与地下施工要求。", 
+                url: "https://www.google.com/search?q=QCVN+08%3A2009%2FBXD",
+                toc: ["第一部分：城市轨道交通 / 地铁工程", " - 1. 设计要求与线网布局", " - 2. 地下车站建筑与结构要求", " - 3. 隧道及附属设施施工工法", "第二部分：地下车库与停车场", " - 1. 选址与空间规划指标", " - 2. 地下车库机电技术系统配置要求"]
+            },
+            { 
+                id: "QCVN 09:2017/BXD", year: 2017, title: "建筑节能国家技术规范", type: "Energy", disciplines: ["建筑", "暖通", "电气"], 
+                desc: "替代2013版，规定了维护结构热工性能、空调及照明的高效能源使用指标。", 
+                url: "https://www.google.com/search?q=QCVN+09%3A2017%2FBXD",
+                toc: ["1. 总则 (强制节能适用建筑类型)", "2. 建筑围护结构要求 (外墙、屋面保温隔热系数 U-value / R-value)", "3. 建筑自然采光与遮阳设计", "4. 暖通空调系统 (HVAC) 能源效率标准", "5. 照明系统功率密度限制及配电效率管理"]
+            },
+            { 
+                id: "QCVN 10:2014/BXD", year: 2014, title: "残障人士无障碍设施规范", type: "Design", disciplines: ["建筑"], 
+                desc: "常与QCVN 05配套使用，强制规范残障人士设施的具体尺寸与参数。", 
+                url: "https://www.google.com/search?q=QCVN+10%3A2014%2FBXD",
+                toc: ["1. 适用范围与基本术语", "2. 通用设计技术指标 (轮椅回转空间、扶手高度、盲道材质)", "3. 建筑物出入口与坡道详图要求", "4. 无障碍电梯与升降平台尺寸", "5. 公共卫生间洁具布置间距与辅助抓杆要求"]
+            },
+            { 
+                id: "QCVN 12:2014/BXD", year: 2014, title: "住宅及公共建筑电气系统", type: "MEP", disciplines: ["电气", "建筑"], 
+                desc: "建筑电气专业基础规范，涵盖室内配电、防雷接地与照明基础安全要求。", 
+                url: "https://www.google.com/search?q=QCVN+12%3A2014%2FBXD",
+                toc: ["1. 建筑电气一般安全规定", "2. 室内供电与低压配电系统布置", "3. 电气线路敷设规范与绝缘要求", "4. 建筑防雷与接地保护系统设计", "5. 人身触电防护与漏电保护装置要求"]
+            },
+            { 
+                id: "QCVN 13:2013/BXD", year: 2013, title: "汽车库/停车场技术规范", type: "Infrastructure", disciplines: ["建筑", "市政"], 
+                desc: "商业、住宅地下车库高频引用，规定了车位尺寸、坡道及交通流线要求。", 
+                url: "https://www.google.com/search?q=QCVN+13%3A2013%2FBXD",
+                toc: ["1. 停车场/车库分类与规划总则", "2. 车位尺寸及停车布局标准 (垂直、斜排停车)", "3. 坡道设计规范 (最大坡度、宽度、转弯半径)", "4. 车库出入口设置与外部交通衔接", "5. 机械停车设备安全与空间要求"]
+            },
+            { 
+                id: "QCVN 16:2023/BXD", year: 2023, title: "建筑材料国家技术标准", type: "Materials", disciplines: ["材料", "管理"], 
+                desc: "更新了进场建材的强制性检验方法与合格认证门槛。", 
+                url: "https://www.google.com/search?q=QCVN+16%3A2023%2FBXD",
+                toc: ["第一部分：总则与行政管理 (认证机构与合规声明)", "第二部分：建材性能技术指标要求", " - 2.1 水泥、混凝土及添加剂标准", " - 2.2 砌体材料与砖块物理性能", " - 2.3 门窗玻璃及五金件安全标准", " - 2.4 内外墙涂料及防水材料环保要求", "第三部分：产品质量检测、取样规则与认证程序"]
+            },
+            { 
+                id: "QCVN 18:2021/BXD", year: 2021, title: "建筑施工安全生产技术规范", type: "Safety", disciplines: ["施工", "管理"], 
+                desc: "强化了现场施工临边防护、起重设备与高空作业安全管理。", 
+                url: "https://www.google.com/search?q=QCVN+18%3A2021%2FBXD",
+                toc: ["1. 施工现场总平面安全管理", "2. 基础施工与深基坑支护安全规范", "3. 高处作业与脚手架搭设/拆除安全", "4. 施工机械起重吊装与特种设备操作", "5. 现场临时用电与电气设备安全防护", "6. 施工现场消防与个人防护装备(PPE)要求"]
+            },
+            { 
+                id: "TCVN 2737:2023", year: 2023, title: "风荷载与雪荷载设计规范", type: "TCVN", disciplines: ["结构"], 
+                desc: "核心推荐性标准。规范建筑结构的风荷载与雪荷载取值计算。", 
+                url: "https://www.google.com/search?q=TCVN+2737%3A2023",
+                toc: ["1. 范围与通用要求", "2. 术语和符号定义", "3. 荷载分类、荷载组合及折减系数", "4. 恒荷载计算规定", "5. 活荷载 (楼面、屋面活荷载取值)", "6. 起重机与吊车荷载", "7. 雪荷载计算", "8. 风荷载计算 (基本风压、风压高度变化系数、体型系数)"]
+            },
+            { 
+                id: "TCVN 9386:2012", year: 2012, title: "抗震设计规范", type: "TCVN", disciplines: ["结构"], 
+                desc: "核心推荐性标准。建筑抗震设防与结构抗震验算基础。", 
+                url: "https://www.google.com/search?q=TCVN+9386%3A2012",
+                toc: ["第一部分：总则、地震作用与抗震计算", " - 1. 设计基本要求与性能目标", " - 2. 地震作用定义及反应谱", " - 3. 结构抗震分析方法", "第二部分：不同材料结构的具体抗震要求", " - 4. 混凝土结构抗震延性设计", " - 5. 钢结构及组合结构抗震构造", " - 6. 砌体结构抗震措施"]
+            },
+            { 
+                id: "TCVN 5574:2018", year: 2018, title: "混凝土结构设计规范", type: "TCVN", disciplines: ["结构"], 
+                desc: "核心推荐性标准。钢筋混凝土结构及预应力混凝土结构设计依据。", 
+                url: "https://www.google.com/search?q=TCVN+5574%3A2018",
+                toc: ["1. 总则与一般要求", "2. 混凝土及钢筋材料强度取值", "3. 结构设计基本原则 (承载力极限与正常使用极限状态)", "4. 构件截面承载力计算 (受弯、受压、受剪、受扭)", "5. 裂缝控制与变形验算", "6. 预应力混凝土结构专门设计要求", "7. 构造规定 (保护层、锚固、接头)"]
+            },
+            { 
+                id: "TCVN 5575:2012", year: 2012, title: "钢结构设计规范", type: "TCVN", disciplines: ["结构"], 
+                desc: "核心推荐性标准。工业厂房及大跨度空间钢结构项目必备。", 
+                url: "https://www.google.com/search?q=TCVN+5575%3A2012",
+                toc: ["1. 适用范围及规范引用", "2. 钢材及连接材料力学性能", "3. 钢结构承载力及稳定计算一般规定", "4. 受弯、轴心受拉/压构件计算", "5. 拉弯、压弯构件设计", "6. 连接计算 (焊缝、普通螺栓、高强螺栓)", "7. 节点构造与防腐防锈处理"]
+            },
+            { 
+                id: "QĐ 682/BXD-CSXD", year: 1997, title: "1997版建筑标准 (第1卷)", type: "General", disciplines: ["综合", "历史沿革"], 
+                desc: "(前QCXDVN体系) 涵盖总纲、术语及建筑设计一般技术条件。", 
+                url: "https://www.google.com/search?q=Quy%E1%BA%BFt+%C4%91%E1%BB%8Bnh+682%2FBXD-CSXD",
+                toc: ["第1章：建筑标准一般条项 (适用范围、术语解释、容许技术解决手法)", "第2章：建筑设计中使用的自然数据", "第3章：建筑项目设计的一般技术条件 (规划、环保、防腐、防虫等总则)"]
+            },
+            { 
+                id: "QĐ 439/BXD-CSXD", year: 1997, title: "1997版建筑标准 (第2卷)", type: "Building", disciplines: ["综合", "历史沿革"], 
+                desc: "(前QCXDVN体系) 民用与工业建筑单体规范，现已被多个新版规范分割。", 
+                url: "https://www.google.com/search?q=Quy%E1%BA%BFt+%C4%91%E1%BB%8Bnh+439%2FBXD-CSXD",
+                toc: ["第8章：民用与工业建筑分类与一般要求", "第9章：建筑设计通用指标", "第10章：结构工程原则与材料", "第12章：建筑设备与物理环境安全 (采光、通风、隔音)", "第13/14章：建筑给排水系统与电气设备", "第16/17章：施工现场布置与劳动安全"]
+            }
+        ];
+
+        let standardsChartInstance = null;
+        let currentYearFilter = null;
+        let currentDisciplineFilter = '全部';
+
+        const disciplinesList = [...new Set(standardsData.flatMap(std => std.disciplines))].sort();
+        const allDisciplines = ['全部', ...disciplinesList];
+
+        const regionData = {
+            'north': {
+                name: "北部大区 (Bắc Bộ)",
+                color: "text-sky-700",
+                stats: "25个省 | 2个直辖市",
+                cities: "河内市 (首都/特级), 海防市 (一级)",
+                feature: "行政与政策中心。建筑规范审批极其严格，冬季存在采暖需求，规范中对建筑保温（热工技术）要求异于南部。"
+            },
+            'central': {
+                name: "中部大区 (Trung Bộ)",
+                color: "text-teal-700",
+                stats: "19个省 | 1个直辖市",
+                cities: "岘港市 (一级)",
+                feature: "狭长海岸线地带。深受台风与暴雨影响，建筑规范在风荷载取值（TCVN 2737 / QCVN 02）、防洪反坎及结构抗侧力设计上为重点审查区域。"
+            },
+            'south': {
+                name: "南部大区 (Nam Bộ)",
+                color: "text-indigo-700",
+                stats: "14个省 | 2个直辖市",
+                cities: "胡志明市 (特级), 芹苴市 (一级)",
+                feature: "经济与工业中心。工业厂房与外资项目密集，重点关注 QCVN 06 消防规范、排涝（雨水系统）及软土地基承载力处理。"
+            }
+        };
+
+        function showRegionDetails(regionKey) {
+            document.querySelectorAll('.region-block').forEach(el => {
+                el.classList.remove('active', 'ring-2', 'ring-offset-2', 'ring-sky-500');
+            });
+            document.getElementById('region-' + regionKey).classList.add('active', 'ring-2', 'ring-offset-2', 'ring-sky-500');
+            
+            const panel = document.getElementById('region-detail-panel');
+            const data = regionData[regionKey];
+            panel.innerHTML = `
+                <h4 class="font-bold ${data.color} text-lg mb-1">${data.name}</h4>
+                <div class="text-xs font-semibold text-slate-600 mb-2 border-b border-slate-100 pb-1">${data.stats}</div>
+                <div class="text-sm text-slate-700 mb-1"><span class="font-semibold">核心城市：</span>${data.cities}</div>
+                <div class="text-sm text-slate-600 mt-2 bg-slate-50 p-2 rounded"><span class="font-semibold text-slate-800">监管/规范特征：</span>${data.feature}</div>
+            `;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('view-' + tabId).classList.add('active');
+
+            if (tabId === 'standards' && !standardsChartInstance) {
+                initChart();
+            }
+        }
+
+        // 修改：给术语卡片绑定 onclick 事件，触发二级弹窗
+        function renderTerms(dataToRender = termsData) {
+            const container = document.getElementById('termsGrid');
+            const query = document.getElementById('termSearch').value.trim();
+            
+            if (dataToRender.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400">未找到匹配的术语。</div>`;
+                return;
+            }
+
+            const highlight = (text, q) => {
+                if (!q) return text;
+                const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${safeQ})`, 'gi');
+                return text.replace(regex, '<mark class="bg-yellow-200 text-slate-900 rounded px-1">$1</mark>');
+            };
+
+            container.innerHTML = dataToRender.map(term => `
+                <div onclick="openTermModal('${term.vi.replace(/'/g, "\\'")}')" class="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-lg hover:-translate-y-1 hover:border-sky-300 transition-all flex flex-col h-full cursor-pointer relative group">
+                    <div class="flex justify-between items-start mb-2 gap-2">
+                        <h4 class="font-bold text-sky-800 text-base leading-tight">${highlight(term.vi, query)}</h4>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded border whitespace-nowrap">${term.source}</span>
+                    </div>
+                    <div class="mb-3 flex flex-wrap gap-1">
+                        <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded">EN: ${highlight(term.en, query)}</span>
+                        <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded">ZH: ${highlight(term.zh, query)}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed overflow-y-auto max-h-20 custom-scrollbar pr-1 flex-grow mb-4">${highlight(term.desc, query)}</p>
+                    
+                    <div class="mt-auto pt-2 border-t border-slate-50 text-center">
+                        <span class="text-[11px] text-sky-500 opacity-60 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            查看完整释义翻译 &rarr;
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterTerms() {
+            const query = document.getElementById('termSearch').value.toLowerCase().trim();
+            if (!query) {
+                renderTerms(termsData);
+                return;
+            }
+            const filtered = termsData.filter(t => 
+                t.vi.toLowerCase().includes(query) || 
+                t.en.toLowerCase().includes(query) || 
+                t.zh.toLowerCase().includes(query) ||
+                t.desc.toLowerCase().includes(query) ||
+                (t.fullVi && t.fullVi.toLowerCase().includes(query)) ||
+                (t.fullZh && t.fullZh.toLowerCase().includes(query))
+            );
+            renderTerms(filtered);
+        }
+
+        // --- Term Modal Functions (术语原文释义二级弹窗) ---
+        function openTermModal(viKey) {
+            const term = termsData.find(t => t.vi === viKey);
+            if(!term) return;
+
+            document.getElementById('termModalVi').innerText = term.vi;
+            document.getElementById('termModalSource').innerText = term.source;
+            document.getElementById('termModalEn').innerText = "EN: " + term.en;
+            document.getElementById('termModalZh').innerText = "ZH: " + term.zh;
+
+            const fullViContent = term.fullVi ? term.fullVi.replace(/\n/g, '<br>') : "<span class='text-slate-400 italic'>Chưa có giải thích chi tiết (暂无详细越文释义)。</span>";
+            const fullZhContent = term.fullZh ? term.fullZh.replace(/\n/g, '<br>') : "<span class='text-slate-400 italic'>暂无对应的详细中文翻译。</span>";
+
+            document.getElementById('termModalFullVi').innerHTML = fullViContent;
+            document.getElementById('termModalFullZh').innerHTML = fullZhContent;
+
+            const innerEl = document.querySelector('#termModal > div');
+            innerEl.classList.remove('modal-enter');
+            void innerEl.offsetWidth; // 触发重排以重置动画
+            innerEl.classList.add('modal-enter');
+
+            document.getElementById('termModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeTermModal() {
+            document.getElementById('termModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('termModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTermModal();
+            }
+        });
+
+
+        function renderExemptions() {
+            const grid = document.getElementById('exemptionsGrid');
+            grid.innerHTML = exemptionsData.map(ex => `
+                <div class="group bg-white border border-slate-200 rounded-lg p-5 hover:border-sky-500 hover:shadow-md transition-all cursor-pointer relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-slate-200 group-hover:bg-sky-500 transition-colors"></div>
+                    <h4 class="font-bold text-slate-800 mb-2 pl-2 group-hover:text-sky-700 transition-colors">${ex.title}</h4>
+                    <p class="text-sm text-slate-500 pl-2 opacity-80 group-hover:opacity-100 transition-opacity">${ex.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderDisciplineFilters() {
+            const container = document.getElementById('disciplineFilters');
+            container.innerHTML = allDisciplines.map(disc => `
+                <button onclick="setDisciplineFilter('${disc}')" 
+                        class="filter-chip px-3 py-1 text-xs md:text-sm rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100 transition-colors ${currentDisciplineFilter === disc ? 'active' : ''}">
+                    ${disc}
+                </button>
+            `).join('');
+        }
+
+        function toggleResetButton() {
+            const resetBtn = document.getElementById('resetFiltersBtn');
+            if (currentYearFilter !== null || currentDisciplineFilter !== '全部') {
+                resetBtn.classList.remove('hidden');
+            } else {
+                resetBtn.classList.add('hidden');
+            }
+        }
+
+        function setDisciplineFilter(discipline) {
+            currentDisciplineFilter = discipline;
+            if(standardsChartInstance) {
+                standardsChartInstance.setActiveElements([]);
+                standardsChartInstance.update();
+                currentYearFilter = null;
+            }
+            renderDisciplineFilters();
+            renderStandardsList();
+        }
+
+        // --- Standard Modal Functions (规范文献库二级弹窗) ---
+        function openStandardModal(stdId) {
+            const std = standardsData.find(s => s.id === stdId);
+            if(!std) return;
+
+            document.getElementById('modalId').innerText = std.id;
+            document.getElementById('modalYear').innerText = std.year;
+            document.getElementById('modalTitle').innerText = std.title;
+            
+            let badgeColor = "bg-slate-100 text-slate-700 border-slate-200";
+            if(std.type === "Fire" || std.type === "Safety") badgeColor = "bg-red-50 text-red-700 border-red-200";
+            if(std.type === "Planning" || std.type === "General") badgeColor = "bg-sky-50 text-sky-700 border-sky-200";
+            if(std.type === "Structural" || std.type === "Building") badgeColor = "bg-emerald-50 text-emerald-700 border-emerald-200";
+            if(std.type === "TCVN") badgeColor = "bg-amber-50 text-amber-700 border-amber-200";
+            if(std.type === "MEP" || std.type === "Design" || std.type === "Infrastructure") badgeColor = "bg-indigo-50 text-indigo-700 border-indigo-200";
+            
+            const discTags = std.disciplines.map(d => `<span class="inline-block bg-slate-100 text-slate-600 text-[11px] px-2 py-0.5 rounded border border-slate-200 mr-2 mb-1">${d}</span>`).join('');
+            document.getElementById('modalTags').innerHTML = `
+                <span class="inline-block text-[11px] uppercase font-bold px-2 py-0.5 rounded border mr-2 mb-1 ${badgeColor}">${std.type}</span>
+                ${discTags}
+            `;
+
+            document.getElementById('modalDesc').innerText = std.desc;
+
+            const tocHtml = std.toc.map(chapter => `<li>${chapter}</li>`).join('');
+            document.getElementById('modalToc').innerHTML = tocHtml;
+
+            document.getElementById('modalExternalLink').href = std.url || '#';
+
+            const innerEl = document.querySelector('#standardModal > div');
+            innerEl.classList.remove('modal-enter');
+            void innerEl.offsetWidth; // 触发重排以重置动画
+            innerEl.classList.add('modal-enter');
+
+            document.getElementById('standardModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeStandardModal() {
+            document.getElementById('standardModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('standardModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeStandardModal();
+            }
+        });
+
+
+        function renderStandardsList() {
+            const list = document.getElementById('standardsList');
+            
+            let filteredData = standardsData;
+            
+            if (currentYearFilter) {
+                filteredData = filteredData.filter(s => s.year === currentYearFilter);
+            }
+            
+            if (currentDisciplineFilter !== '全部') {
+                filteredData = filteredData.filter(s => s.disciplines.includes(currentDisciplineFilter));
+            }
+            
+            document.getElementById('libraryCount').innerText = `(筛选出 ${filteredData.length} 项)`;
+            toggleResetButton();
+            
+            if (filteredData.length === 0) {
+                list.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400">未找到符合条件的规范，请放宽筛选条件。</div>`;
+                return;
+            }
+
+            list.innerHTML = filteredData.map(std => {
+                let badgeColor = "bg-slate-100 text-slate-700 border-slate-200";
+                if(std.type === "Fire" || std.type === "Safety") badgeColor = "bg-red-50 text-red-700 border-red-200";
+                if(std.type === "Planning" || std.type === "General") badgeColor = "bg-sky-50 text-sky-700 border-sky-200";
+                if(std.type === "Structural" || std.type === "Building") badgeColor = "bg-emerald-50 text-emerald-700 border-emerald-200";
+                if(std.type === "TCVN") badgeColor = "bg-amber-50 text-amber-700 border-amber-200";
+                if(std.type === "MEP" || std.type === "Design" || std.type === "Infrastructure") badgeColor = "bg-indigo-50 text-indigo-700 border-indigo-200";
+                
+                const discTags = std.disciplines.map(d => `<span class="inline-block bg-slate-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded mr-1 mb-1">${d}</span>`).join('');
+
+                return `
+                <div onclick="openStandardModal('${std.id}')" class="bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between hover:shadow-md hover:border-sky-400 hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-slate-800 text-sm md:text-base pr-2">${std.id}</h4>
+                            <span class="text-xs font-bold bg-slate-800 text-white px-2 py-1 rounded">${std.year}</span>
+                        </div>
+                        <h5 class="text-sky-700 font-medium text-sm mb-2 group-hover:text-sky-600 flex items-center justify-between">
+                            ${std.title}
+                            <span class="text-xs text-sky-400 opacity-60">查看导览 &rarr;</span>
+                        </h5>
+                        <div class="mb-2">
+                            ${discTags}
+                        </div>
+                        <p style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;" class="text-xs text-slate-600 mb-3 leading-relaxed">${std.desc}</p>
+                    </div>
+                    <div class="mt-auto pt-2 border-t border-slate-50">
+                        <span class="inline-block text-[10px] uppercase font-bold px-2 py-1 rounded border ${badgeColor}">${std.type}</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function resetStandardsFilter() {
+            currentYearFilter = null;
+            currentDisciplineFilter = '全部';
+            renderDisciplineFilters();
+            renderStandardsList();
+            
+            if(standardsChartInstance) {
+                standardsChartInstance.setActiveElements([]);
+                standardsChartInstance.update();
+            }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('standardsChart').getContext('2d');
+            
+            const yearCounts = {};
+            standardsData.forEach(std => {
+                yearCounts[std.year] = (yearCounts[std.year] || 0) + 1;
+            });
+
+            const sortedYears = Object.keys(yearCounts).sort((a,b) => a-b);
+            const dataCounts = sortedYears.map(y => yearCounts[y]);
+
+            standardsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedYears,
+                    datasets: [{
+                        label: '规范/通达发布数量',
+                        data: dataCounts,
+                        backgroundColor: '#0ea5e9',
+                        hoverBackgroundColor: '#0369a1',
+                        borderRadius: 4,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(ctx) {
+                                    return ctx[0].label + ' 年';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, color: '#64748b' },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            ticks: { color: '#64748b' },
+                            grid: { display: false }
+                        }
+                    },
+                    onClick: (e, activeEls) => {
+                        if (activeEls.length > 0) {
+                            const dataIndex = activeEls[0].index;
+                            currentYearFilter = parseInt(sortedYears[dataIndex]);
+                            currentDisciplineFilter = '全部'; 
+                            renderDisciplineFilters();
+                            renderStandardsList();
+                        } else {
+                            currentYearFilter = null;
+                            renderDisciplineFilters(); 
+                            renderStandardsList();
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初始化
+        renderTerms();
+        renderExemptions();
+        renderDisciplineFilters();
+        renderStandardsList();
+        showRegionDetails('north');
+
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        // 监听 ESC 键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeStandardModal();
+                closeTermModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
